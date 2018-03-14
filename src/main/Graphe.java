@@ -54,7 +54,7 @@ public class Graphe {
                     Sommet sommetB = listeSommet.get(j);
                     double distance = Outils.distance(listeSommet.get(i),listeSommet.get(j));
 
-                    if(distance < 25){
+                    if(distance < 25 || sommetA.getIndex() == 0 ||sommetB.getIndex() == 0){
                         Arc arc1 = new Arc(sommetA, sommetB, distance);
                         adjacence.get(sommetA).add(arc1);
                         Arc arc2 = new Arc(sommetB, sommetA, distance);
