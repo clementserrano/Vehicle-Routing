@@ -50,8 +50,13 @@ public class Tabou {
         boolean solutionOK = false;
 
         while(!solutionOK) {
+            solutionPermutee.clear();
+            fragmentA.clear();
+            fragmentB.clear();
+            indexOK = false;
             while (!indexOK) {
-                indexA = Outils.getRandomBetween(0, solution.size() - 2);
+                //A VOIR: Les fragments ont souvent une taille de seulement 1.
+                indexA = Outils.getRandomBetween(1, solution.size() - 2);
                 int tailleMaxA = solution.size() - 2 - indexA;
                 int tailleA = Outils.getRandomBetween(0, tailleMaxA > TAILLE_MAX ? TAILLE_MAX : tailleMaxA);
                 if (tailleA == 0) {
@@ -108,6 +113,7 @@ public class Tabou {
             listeTabou.add(permutation);
         }
 
+        System.out.println(solutionPermutee.stream().map(sommet -> sommet.toString()).collect(joining(";")));
         return solutionPermutee;
     }
 
