@@ -1,9 +1,11 @@
 package main;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.List;
 
 import static java.util.stream.Collectors.joining;
 
@@ -84,9 +86,34 @@ public class Graphe {
         this.capacite = capacite;
     }
 
-    public void dessine() {
-        JFrame fenetre = new JFrame();
-        JPanel panel = new JPanel();
+    JFrame fenetre = new JFrame();
+    public void dessine(int fromX, int fromY, int toX, int toY) {
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                g.drawLine(fromX, fromY, toX, toY);
+            }
+        };
+        panel.setLayout(null);
+
+        for(Sommet sommet : adjacence.keySet()){
+            JLabel label = new JLabel(sommet.toString());
+            label.setLocation(sommet.getX()*5, sommet.getY()*5);
+            label.setSize(20, 20);
+            panel.add(label);
+        }
+
+        fenetre.add(panel);
+        fenetre.setSize(1000,1000);
+        fenetre.setVisible(true);
+    }
+
+    public void startDraw()
+    {
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g );
+            }
+        };
         panel.setLayout(null);
 
         for(Sommet sommet : adjacence.keySet()){

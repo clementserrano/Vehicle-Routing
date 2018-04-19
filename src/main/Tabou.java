@@ -28,8 +28,15 @@ public class Tabou {
             }
             i++;
             System.out.println(i + " : " + distanceTotaleMin);
-        }
 
+            //Draw
+            if (i % 1000 == 0) {
+                graphe.startDraw();
+                for (int j = 0; j < solution.size() - 1; j++) {
+                    graphe.dessine(solution.get(j).getX() * 5, solution.get(j).getY() * 5, solution.get(j + 1).getX() * 5, solution.get(j + 1).getY() * 5);
+                }
+            }
+        }
         return solution.stream().map(sommet -> sommet.toString()).collect(joining(";"));
     }
 
