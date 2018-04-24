@@ -6,12 +6,12 @@ import static java.util.stream.Collectors.joining;
 
 public class Tabou {
 
-    private final int ITERATION_MAX = 10000;
+    private final int ITERATION_MAX = 1000000000;
     private final int TAILLE_MAX = 3;
 
     public String findSolution(Graphe graphe) {
         // Création d'une solution X0
-        List<Sommet> solution = findSolutionX0(graphe);
+        List<Sommet> solution = Outils.findFirstSolution(graphe);
         float distanceTotaleMin = Outils.distanceTotale(solution);
         System.out.println(solution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
 
@@ -27,15 +27,12 @@ public class Tabou {
                 distanceTotaleMin = distanceSolutionPermutee;
             }
             i++;
+            if(i%100000==0)
             System.out.println(i + " : " + distanceTotaleMin);
-
-            //Draw
-            if (i % 1000 == 0) {
-                graphe.startDraw();
-                for (int j = 0; j < solution.size() - 1; j++) {
-                    graphe.dessine(solution.get(j).getX() * 5, solution.get(j).getY() * 5, solution.get(j + 1).getX() * 5, solution.get(j + 1).getY() * 5);
-                }
-            }
+        }
+        graphe.startDraw();
+        for (int j = 0; j < solution.size() - 1; j++) {
+            graphe.dessine(solution.get(j).getX() * 5, solution.get(j).getY() * 5, solution.get(j + 1).getX() * 5, solution.get(j + 1).getY() * 5);
         }
         return solution.stream().map(sommet -> sommet.toString()).collect(joining(";"));
     }
@@ -109,7 +106,7 @@ public class Tabou {
             } else {
                 solutionPermutee.addAll(indexB, fragmentA);
             }
-            System.out.println(Outils.getQuantiteTotale(graphe, solutionPermutee));
+            //System.out.println(Outils.getQuantiteTotale(graphe, solutionPermutee));
             solutionOK = Outils.capaciteRespectee(graphe, solutionPermutee);
         }
 
@@ -120,35 +117,8 @@ public class Tabou {
             listeTabou.add(permutation);
         }
 
-        System.out.println(solutionPermutee.stream().map(sommet -> sommet.toString()).collect(joining(";")));
+        //System.out.println(solutionPermutee.stream().map(sommet -> sommet.toString()).collect(joining(";")));
         return solutionPermutee;
-    }
-
-    private List<Sommet> findSolutionX0(Graphe graphe) {
-        List<Sommet> solution = new ArrayList<>();
-        Set<Sommet> sommetsParcourus = new HashSet<>();
-
-        solution.add(graphe.getSommetDepart());
-        sommetsParcourus.add(graphe.getSommetDepart());
-        Sommet sommetSuivant = graphe.getSommetDepart();
-
-        while (sommetsParcourus.size() != graphe.getAdjacence().keySet().size()) {
-            int sommeQuantite = 0;
-            while (sommetSuivant != null && sommeQuantite < graphe.getCapacite()) {
-                List<Arc> arcs = graphe.getAdjacence().get(sommetSuivant);
-                sommetSuivant = Outils.getVoisinProche(arcs, sommetsParcourus);
-                if (sommetSuivant != null && sommeQuantite + sommetSuivant.getQuantite() < graphe.getCapacite()) {
-                    sommeQuantite += sommetSuivant.getQuantite();
-                    solution.add(sommetSuivant);
-                    sommetsParcourus.add(sommetSuivant);
-                } else {
-                    break;
-                }
-            }
-            solution.add(graphe.getSommetDepart());
-            sommetSuivant = graphe.getSommetDepart();
-        }
-        return solution;
     }
 
 

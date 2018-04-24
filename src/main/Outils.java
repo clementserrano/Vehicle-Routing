@@ -1,8 +1,6 @@
 package main;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class Outils {
 
@@ -62,5 +60,32 @@ public class Outils {
     public static int getRandomBetween(int debut, int fin){
         Random r = new Random();
         return r.nextInt(fin - debut) + debut;
+    }
+
+    public static List<Sommet> findFirstSolution(Graphe graphe) {
+        List<Sommet> solution = new ArrayList<>();
+        Set<Sommet> sommetsParcourus = new HashSet<>();
+
+        solution.add(graphe.getSommetDepart());
+        sommetsParcourus.add(graphe.getSommetDepart());
+        Sommet sommetSuivant = graphe.getSommetDepart();
+
+        while (sommetsParcourus.size() != graphe.getAdjacence().keySet().size()) {
+            int sommeQuantite = 0;
+            while (sommetSuivant != null && sommeQuantite < graphe.getCapacite()) {
+                List<Arc> arcs = graphe.getAdjacence().get(sommetSuivant);
+                sommetSuivant = Outils.getVoisinProche(arcs, sommetsParcourus);
+                if (sommetSuivant != null && sommeQuantite + sommetSuivant.getQuantite() < graphe.getCapacite()) {
+                    sommeQuantite += sommetSuivant.getQuantite();
+                    solution.add(sommetSuivant);
+                    sommetsParcourus.add(sommetSuivant);
+                } else {
+                    break;
+                }
+            }
+            solution.add(graphe.getSommetDepart());
+            sommetSuivant = graphe.getSommetDepart();
+        }
+        return solution;
     }
 }
