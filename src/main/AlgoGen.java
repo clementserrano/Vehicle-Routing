@@ -1,12 +1,13 @@
 package main;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
 public class AlgoGen {
 
-    private final int ITERATION_MAX = 100;
+    private final int ITERATION_MAX = 1;
 
     public String findSolution(Graphe graphe) {
         SolutionGen solutionFound = new SolutionGen();
@@ -23,15 +24,45 @@ public class AlgoGen {
 
         for (int i = 0; i < ITERATION_MAX; i++) {
             int cpt = 0;
-            List<Sommet> bestSolution;
+            List<Float> fitnessList = new ArrayList<>();
             for (SolutionGen solution : population) {
+                fitnessList.add(Outils.distanceTotale(solution.getListeSommets()));
                 cpt += Outils.distanceTotale(solution.getListeSommets());
             }
+            for (int j = 0; j < fitnessList.size(); j++) {
+                Float proba = fitnessList.get(j);
+                proba /= cpt;
+                if (j > 0) {
+                    fitnessList.set(j, fitnessList.get(j - 1) + proba);
+                } else {
+                    fitnessList.set(j, proba);
+                }
+            }
+            System.out.println(fitnessList);
+
+            List<SolutionGen> populationTemp = new ArrayList<>();
+            for (int j = 0; j < population.size(); j++) {
+                double rand = Math.random();
+                System.out.println(rand);
+                int index = 0;
+                for (Float fitness : fitnessList) {
+                    if (rand < fitness) {
+                        populationTemp.add(population.get(index));
+                        break;
+                    }
+                    index++;
+                }
+            }
+            population = populationTemp;
+            for (SolutionGen solution : population) {
+                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
+            }
+
+
         }
+
+
         solutionFound = solution1;
-
-        System.out.println(solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
-
         return solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";"));
     }
 
