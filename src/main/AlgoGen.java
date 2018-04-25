@@ -39,11 +39,12 @@ public class AlgoGen {
                 }
             }
             System.out.println(fitnessList);
+            System.out.print("\n");
 
             List<SolutionGen> populationTemp = new ArrayList<>();
             for (int j = 0; j < population.size(); j++) {
                 double rand = Math.random();
-                System.out.println(rand);
+                //System.out.println(rand);
                 int index = 0;
                 for (Float fitness : fitnessList) {
                     if (rand < fitness) {
@@ -58,6 +59,37 @@ public class AlgoGen {
                 System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
             }
 
+            List<SolutionGen> first = new ArrayList<>(population.subList(0, population.size()/2));
+            List<SolutionGen> second = new ArrayList<>(population.subList(population.size()/2, population.size()));
+
+            population.clear();
+
+            for (int j = 0; j < first.size(); j++) {
+                int indexCroisement = Outils.getRandomBetween(0, first.get(j).getListeSommets().size());
+                System.out.println(indexCroisement);
+                SolutionGen solutionFirstPart = first.get(j);
+                SolutionGen solutionSecondPart = second.get(j);
+                List<Sommet> fragment1 = solutionFirstPart.getListeSommets().subList(0, indexCroisement);
+                List<Sommet> fragment2 = solutionFirstPart.getListeSommets().subList(indexCroisement, solutionFirstPart.getListeSommets().size());
+
+                List<Sommet> fragment3 = solutionSecondPart.getListeSommets().subList(0, indexCroisement);
+                List<Sommet> fragment4 = solutionSecondPart.getListeSommets().subList(indexCroisement, solutionSecondPart.getListeSommets().size());
+
+                List<Sommet> newSolution1 = new ArrayList<>();
+                newSolution1.addAll(fragment1);
+                newSolution1.addAll(fragment4);
+                List<Sommet> newSolution2 = new ArrayList<>();
+                newSolution2.addAll(fragment3);
+                newSolution2.addAll(fragment2);
+
+                population.add(new SolutionGen(newSolution1));
+                population.add(new SolutionGen(newSolution2));
+            }
+
+            System.out.println();
+            for (SolutionGen solution : population) {
+                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
+            }
 
         }
 

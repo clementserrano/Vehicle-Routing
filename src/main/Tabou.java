@@ -6,7 +6,7 @@ import static java.util.stream.Collectors.joining;
 
 public class Tabou {
 
-    private final int ITERATION_MAX = 1000000000;
+    private final int ITERATION_MAX = 1000000;
     private final int TAILLE_MAX = 3;
 
     public String findSolution(Graphe graphe) {

@@ -16,7 +16,7 @@ public class Test {
 
         System.out.println("\nAlgoGen");
         AlgoGen algoGen = new AlgoGen();
-        System.out.println("Final : " + algoGen.findSolution(graphe) + "\n");
+        System.out.println("\nFinal : " + algoGen.findSolution(graphe) + "\n");
 
         System.out.println("Fin");
     }
