@@ -7,40 +7,50 @@ import static java.util.stream.Collectors.joining;
 
 public class AlgoGen {
 
-    private final int ITERATION_MAX = 1;
+    private final int ITERATION_MAX = 10000;
 
     public String findSolution(Graphe graphe) {
         SolutionGen solutionFound = new SolutionGen();
-        SolutionGen solution1 = new SolutionGen(findSolutionX0(graphe));
-        SolutionGen solution2 = new SolutionGen(findSolutionX0(graphe));
-        SolutionGen solution3 = new SolutionGen(findSolutionX0(graphe));
-        SolutionGen solution4 = new SolutionGen(findSolutionX0(graphe));
-
         List<SolutionGen> population = new ArrayList<>();
-        population.add(solution1);
-        population.add(solution2);
-        population.add(solution3);
-        population.add(solution4);
+        for (int i = 0; i < 40; i++) {
+            SolutionGen solution = new SolutionGen(findSolutionX0(graphe));
+            population.add(solution);
+        }
 
         for (int i = 0; i < ITERATION_MAX; i++) {
+
+            //1 - Reproduction
             int cpt = 0;
             List<Float> fitnessList = new ArrayList<>();
-            for (SolutionGen solution : population) {
-                fitnessList.add(Outils.distanceTotale(solution.getListeSommets()));
-                cpt += Outils.distanceTotale(solution.getListeSommets());
+            for (int j = 0; j < population.size(); j++) {
+                float fitness;
+                if (Outils.capaciteRespectee(graphe, population.get(j).getListeSommets()))
+                    fitness = Outils.distanceTotale(population.get(j).getListeSommets());
+                else
+                    fitness = (float) 1000000;
+                fitnessList.add(fitness);
+                cpt += fitness;
             }
+
+            //Pondération
+            float cpt2 = 0;
             for (int j = 0; j < fitnessList.size(); j++) {
-                Float proba = fitnessList.get(j);
-                proba /= cpt;
+                float proba = fitnessList.get(j) / cpt;
+                cpt2 += proba;
+                fitnessList.set(j, 1 - proba);
+            }
+
+            //Inversion pondération
+            for (int j = 0; j < fitnessList.size(); j++) {
+                float proba = fitnessList.get(j) / cpt2;
                 if (j > 0) {
                     fitnessList.set(j, fitnessList.get(j - 1) + proba);
                 } else {
                     fitnessList.set(j, proba);
                 }
             }
-            System.out.println(fitnessList);
-            System.out.print("\n");
 
+            //Choix reproduction
             List<SolutionGen> populationTemp = new ArrayList<>();
             for (int j = 0; j < population.size(); j++) {
                 double rand = Math.random();
@@ -55,18 +65,18 @@ public class AlgoGen {
                 }
             }
             population = populationTemp;
-            for (SolutionGen solution : population) {
+            /*for (SolutionGen solution : population) {
                 System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
-            }
+            }*/
 
-            List<SolutionGen> first = new ArrayList<>(population.subList(0, population.size()/2));
-            List<SolutionGen> second = new ArrayList<>(population.subList(population.size()/2, population.size()));
+            //2 - Croisement
+            List<SolutionGen> first = new ArrayList<>(population.subList(0, population.size() / 2));
+            List<SolutionGen> second = new ArrayList<>(population.subList(population.size() / 2, population.size()));
 
             population.clear();
 
             for (int j = 0; j < first.size(); j++) {
                 int indexCroisement = Outils.getRandomBetween(0, first.get(j).getListeSommets().size());
-                System.out.println(indexCroisement);
                 SolutionGen solutionFirstPart = first.get(j);
                 SolutionGen solutionSecondPart = second.get(j);
                 List<Sommet> fragment1 = solutionFirstPart.getListeSommets().subList(0, indexCroisement);
@@ -86,15 +96,36 @@ public class AlgoGen {
                 population.add(new SolutionGen(newSolution2));
             }
 
-            System.out.println();
+            //3 - Mutation
             for (SolutionGen solution : population) {
-                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
+                double rand = Math.random();
+                if (rand < 0.9) {
+                    int a = Outils.getRandomBetween(0, solution.getListeSommets().size());
+                    int b = Outils.getRandomBetween(0, solution.getListeSommets().size());
+                    Collections.swap(solution.getListeSommets(), a, b);
+                }
             }
-
+            for (SolutionGen solution : population) {
+                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
+            }
         }
 
 
-        solutionFound = solution1;
+        solutionFound = population.get(0);
+        for (SolutionGen solution : population) {
+            if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
+                solutionFound = solution;
+            }
+        }
+
+        /*
+        graphe.startDraw();
+        for (int j = 0; j < solutionFound.getListeSommets().size() - 1; j++) {
+            graphe.dessine(solutionFound.getListeSommets().get(j).getX() * 5, solutionFound.getListeSommets().get(j).getY() * 5, solutionFound.getListeSommets().get(j + 1).getX() * 5, solutionFound.getListeSommets().get(j + 1).getY() * 5);
+        }*/
+
+        System.out.println("Meilleur : ");
+        System.out.println(solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solutionFound.getListeSommets()));
         return solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";"));
     }
 
@@ -108,7 +139,6 @@ public class AlgoGen {
             Collections.shuffle(solution_tmp);
             solutionOK = Outils.capaciteRespectee(graphe, solution_tmp);
         }
-        System.out.println(solution_tmp.stream().map(sommet -> sommet.toString()).collect(joining(";")));
 
         return solution_tmp;
     }
