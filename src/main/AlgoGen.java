@@ -24,7 +24,7 @@ public class AlgoGen {
             List<Float> fitnessList = new ArrayList<>();
             for (int j = 0; j < population.size(); j++) {
                 float fitness;
-                if (Outils.capaciteRespectee(graphe, population.get(j).getListeSommets()))
+                if (Outils.capaciteRespectee(graphe, population.get(j).getListeSommets()) && population.get(j).containsAll(graphe))
                     fitness = Outils.distanceTotale(population.get(j).getListeSommets());
                 else
                     fitness = (float) 1000000;
@@ -105,9 +105,9 @@ public class AlgoGen {
                     Collections.swap(solution.getListeSommets(), a, b);
                 }
             }
-            for (SolutionGen solution : population) {
-                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
-            }
+        }
+        for (SolutionGen solution : population) {
+            System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
         }
 
 
@@ -118,11 +118,11 @@ public class AlgoGen {
             }
         }
 
-        /*
+
         graphe.startDraw();
         for (int j = 0; j < solutionFound.getListeSommets().size() - 1; j++) {
             graphe.dessine(solutionFound.getListeSommets().get(j).getX() * 5, solutionFound.getListeSommets().get(j).getY() * 5, solutionFound.getListeSommets().get(j + 1).getX() * 5, solutionFound.getListeSommets().get(j + 1).getY() * 5);
-        }*/
+        }
 
         System.out.println("Meilleur : ");
         System.out.println(solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solutionFound.getListeSommets()));
