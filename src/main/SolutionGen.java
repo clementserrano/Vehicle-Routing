@@ -1,5 +1,7 @@
 package main;
 
+import main.graphe.Sommet;
+
 import java.util.List;
 
 public class SolutionGen {

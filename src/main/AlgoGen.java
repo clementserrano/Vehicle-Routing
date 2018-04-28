@@ -1,7 +1,9 @@
 package main;
 
+import main.graphe.Graphe;
+import main.graphe.Sommet;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
