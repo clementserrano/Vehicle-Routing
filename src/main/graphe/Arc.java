@@ -1,4 +1,4 @@
-package main;
+package main.graphe;
 
 public class Arc {
 

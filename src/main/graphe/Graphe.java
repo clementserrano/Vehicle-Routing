@@ -1,4 +1,6 @@
-package main;
+package main.graphe;
+
+import main.Outils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +32,6 @@ public class Graphe {
                 // Construction des sommets
                 while(input.hasNextLine()){
                     line = input.nextLine();
-                    //System.out.println(line);
                     String[] data = line.split(";");
 
                     Sommet sommet = new Sommet(

@@ -1,5 +1,9 @@
 package main;
 
+import main.graphe.Arc;
+import main.graphe.Graphe;
+import main.graphe.Sommet;
+
 import java.util.*;
 
 public class Outils {
@@ -38,6 +42,9 @@ public class Outils {
             }
             quantiteTotale += s.getQuantite();
             if(quantiteTotale > graphe.getCapacite()){
+                return false;
+            }
+            if(s.equals(solution.get(solution.size()-1)) && s.getIndex() != 0){
                 return false;
             }
         }
@@ -87,5 +94,17 @@ public class Outils {
             sommetSuivant = graphe.getSommetDepart();
         }
         return solution;
+    }
+
+    public static List<Sommet> cleanSolution(List<Sommet> solution){
+        List<Sommet> res = new ArrayList<>();
+        Sommet sommetPrev = new Sommet(Integer.MAX_VALUE,0,0,0);
+        for(Sommet sommet : solution){
+            if(!(sommetPrev.getIndex() == 0 && sommet.getIndex() == 0)){
+                res.add(sommet);
+            }
+            sommetPrev = sommet;
+        }
+        return res;
     }
 }
