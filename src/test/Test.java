@@ -1,5 +1,6 @@
 package test;
 
+import main.AlgoGen;
 import main.Outils;
 import main.graphe.Graphe;
 import main.graphe.Sommet;
