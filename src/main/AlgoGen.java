@@ -7,14 +7,18 @@ import static java.util.stream.Collectors.joining;
 
 public class AlgoGen {
 
-    private final int ITERATION_MAX = 10000;
+    private final int ITERATION_MAX = 10;
 
     public String findSolution(Graphe graphe) {
         SolutionGen solutionFound = new SolutionGen();
         List<SolutionGen> population = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 4; i++) {
             SolutionGen solution = new SolutionGen(findSolutionX0(graphe));
             population.add(solution);
+        }
+
+        for (SolutionGen solution : population) {
+            System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
         }
 
         for (int i = 0; i < ITERATION_MAX; i++) {
@@ -24,7 +28,7 @@ public class AlgoGen {
             List<Float> fitnessList = new ArrayList<>();
             for (int j = 0; j < population.size(); j++) {
                 float fitness;
-                if (Outils.capaciteRespectee(graphe, population.get(j).getListeSommets()) && population.get(j).containsAll(graphe))
+                if (Outils.capaciteRespectee(graphe, population.get(j).getListeSommets()))
                     fitness = Outils.distanceTotale(population.get(j).getListeSommets());
                 else
                     fitness = (float) 1000000;
@@ -36,7 +40,7 @@ public class AlgoGen {
             float cpt2 = 0;
             for (int j = 0; j < fitnessList.size(); j++) {
                 float proba = fitnessList.get(j) / cpt;
-                cpt2 += proba;
+                cpt2 += 1 - proba;
                 fitnessList.set(j, 1 - proba);
             }
 
@@ -58,7 +62,7 @@ public class AlgoGen {
                 int index = 0;
                 for (Float fitness : fitnessList) {
                     if (rand < fitness) {
-                        populationTemp.add(population.get(index));
+                        populationTemp.add(new SolutionGen(population.get(index).getListeSommets()));
                         break;
                     }
                     index++;
@@ -70,6 +74,10 @@ public class AlgoGen {
             }*/
 
             //2 - Croisement
+
+
+
+            /*
             List<SolutionGen> first = new ArrayList<>(population.subList(0, population.size() / 2));
             List<SolutionGen> second = new ArrayList<>(population.subList(population.size() / 2, population.size()));
 
@@ -95,19 +103,24 @@ public class AlgoGen {
                 population.add(new SolutionGen(newSolution1));
                 population.add(new SolutionGen(newSolution2));
             }
+            */
+
 
             //3 - Mutation
             for (SolutionGen solution : population) {
                 double rand = Math.random();
-                if (rand < 0.9) {
+                if (rand < 0.1) {
                     int a = Outils.getRandomBetween(0, solution.getListeSommets().size());
                     int b = Outils.getRandomBetween(0, solution.getListeSommets().size());
                     Collections.swap(solution.getListeSommets(), a, b);
                 }
             }
-        }
-        for (SolutionGen solution : population) {
-            System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
+
+
+            System.out.println();
+            for (SolutionGen solution : population) {
+                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
+            }
         }
 
 
