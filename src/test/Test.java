@@ -1,11 +1,8 @@
 package test;
 
-import main.Outils;
+import main.AlgoGen;
 import main.graphe.Graphe;
-import main.graphe.Sommet;
 import main.tabou.Tabou;
-
-import java.util.List;
 
 public class Test {
     public static void main(String[] args) {
@@ -18,8 +15,8 @@ public class Test {
         System.out.println(tabou.findSolution(graphe));
 
         System.out.println("\nAlgoGen");
-        //AlgoGen algoGen = new AlgoGen();
-        //System.out.println("\nFinal : " + algoGen.findSolution(graphe) + "\n");
+        AlgoGen algoGen = new AlgoGen();
+        System.out.println("\nFinal : " + algoGen.findSolution(graphe) + "\n");
 
         System.out.println("Fin");
     }

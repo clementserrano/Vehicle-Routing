@@ -11,9 +11,9 @@ import static java.util.stream.Collectors.joining;
 
 public class Tabou {
 
-    private static final int ITERATION_MAX = 1000000;
-    private static final int TAILLE_VOISINAGE = 800;
-    private static final int TAILLE_LISTE_TABOU = 200;
+    private static final int ITERATION_MAX = 100000;
+    private static final int TAILLE_VOISINAGE = 200;
+    private static final int TAILLE_LISTE_TABOU = 100;
 
     private static int TAILLE_MAX_PERMUTATION;
 
@@ -27,8 +27,6 @@ public class Tabou {
         TAILLE_MAX_PERMUTATION = (graphe.getAdjacence().keySet().size() - 2) / 3;
 
         List<Permutation> listeTabou = new ArrayList<>();
-        Historique historique = new Historique();
-        historique.add(distanceTotaleMin,listeTabou);
 
         Voisin voisinPrev = new Voisin(solution, distanceTotaleMin, null);
         int i = 0;
@@ -65,8 +63,6 @@ public class Tabou {
 
                 voisinPrev = voisinNext;
             }else{
-                System.out.println("---------------------------------------TABOU END-------------------------------------------------------");
-                System.out.println(i + " : " + distanceTotaleMin + "    tabou : " + listeTabou.size());
                 break;
             }
 
@@ -76,18 +72,15 @@ public class Tabou {
                 System.out.println(i + " : " + distanceTotaleMin + "    tabou : " + listeTabou.size());
                 System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
             }
-
-            /*if(historique.contains(voisinNext.getDistance(),listeTabou)){
-                System.out.println("Loop detected");
-                break;
-            }else{
-                historique.add(voisinNext.getDistance(),listeTabou);
-            }*/
         }
-        /*graphe.startDraw();
+
+        System.out.println("---------------------------------------TABOU END-------------------------------------------------------");
+        System.out.println(i + " : " + distanceTotaleMin + "    tabou : " + listeTabou.size());
+
+        graphe.startDraw();
         for (int j = 0; j < bestSolution.size() - 1; j++) {
             graphe.dessine(bestSolution.get(j).getX() * 5, bestSolution.get(j).getY() * 5, bestSolution.get(j + 1).getX() * 5, bestSolution.get(j + 1).getY() * 5);
-        }*/
+        }
         return bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";"));
     }
 
