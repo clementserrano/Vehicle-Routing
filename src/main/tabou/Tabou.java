@@ -39,9 +39,13 @@ public class Tabou {
 
         while (i < ITERATION_MAX) {
             Voisinage voisinage = new Voisinage();
+            List<Permutation> permutations = new ArrayList<>();
             while (voisinage.size() < TAILLE_VOISINAGE) {
                 Voisin voisin = permutation(voisinPrev.getSolution(), graphe);
-                voisinage.add(voisin);
+                if(!permutations.contains(voisin.getPermutation())){
+                    voisinage.add(voisin);
+                    permutations.add(voisin.getPermutation());
+                }
             }
 
             Voisin voisinNext = voisinage.getBest(listeTabou);
@@ -61,10 +65,9 @@ public class Tabou {
 
                 voisinPrev = voisinNext;
             }else{
-                /*System.out.println("---------------------------------------TABOU END-------------------------------------------------------");
+                System.out.println("---------------------------------------TABOU END-------------------------------------------------------");
                 System.out.println(i + " : " + distanceTotaleMin + "    tabou : " + listeTabou.size());
-                //System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
-                break;*/
+                break;
             }
 
             i++;

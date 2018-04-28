@@ -9,13 +9,17 @@ public class Voisinage extends ArrayList<Voisin> {
         Voisin best = this.get(0);
         boolean isTabou = listeTabou.contains(best.getPermutation());
         for (Voisin voisin : this) {
-            if (voisin.getDistance() < best.getDistance() && !listeTabou.contains(voisin.getPermutation())) {
-                best = voisin;
+            if(!listeTabou.contains(voisin.getPermutation())){
                 isTabou = false;
+                if (voisin.getDistance() < best.getDistance()) {
+                    best = voisin;
+                }
             }
         }
 
-        if(isTabou) return null;
+        if(isTabou){
+            return null;
+        }
         return best;
     }
 }

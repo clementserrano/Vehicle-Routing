@@ -13,7 +13,7 @@ public class Test {
         //System.out.println(graphe);
         graphe.setCapacite(100);
 
-        System.out.println("\ntabou");
+        System.out.println("\nTabou");
         Tabou tabou = new Tabou();
         System.out.println(tabou.findSolution(graphe));
 
