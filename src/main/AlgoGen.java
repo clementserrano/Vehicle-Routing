@@ -9,18 +9,14 @@ import static java.util.stream.Collectors.joining;
 
 public class AlgoGen {
 
-    private final int ITERATION_MAX = 10;
+    private final int ITERATION_MAX = 1000000;
 
     public String findSolution(Graphe graphe) {
         SolutionGen solutionFound = new SolutionGen();
         List<SolutionGen> population = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 40; i++) {
             SolutionGen solution = new SolutionGen(findSolutionX0(graphe));
             population.add(solution);
-        }
-
-        for (SolutionGen solution : population) {
-            System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
         }
 
         for (int i = 0; i < ITERATION_MAX; i++) {
@@ -71,57 +67,74 @@ public class AlgoGen {
                 }
             }
             population = populationTemp;
-            /*for (SolutionGen solution : population) {
-                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")));
-            }*/
 
             //2 - Croisement
 
-
-
-            /*
             List<SolutionGen> first = new ArrayList<>(population.subList(0, population.size() / 2));
             List<SolutionGen> second = new ArrayList<>(population.subList(population.size() / 2, population.size()));
 
             population.clear();
 
             for (int j = 0; j < first.size(); j++) {
-                int indexCroisement = Outils.getRandomBetween(0, first.get(j).getListeSommets().size());
+                //int indexCroisement = Outils.getRandomBetween(0, first.get(j).getListeSommets().size());
+                int indexCroisement = 15;
                 SolutionGen solutionFirstPart = first.get(j);
                 SolutionGen solutionSecondPart = second.get(j);
-                List<Sommet> fragment1 = solutionFirstPart.getListeSommets().subList(0, indexCroisement);
-                List<Sommet> fragment2 = solutionFirstPart.getListeSommets().subList(indexCroisement, solutionFirstPart.getListeSommets().size());
+                List<Sommet> fragment1 = new ArrayList<>(solutionFirstPart.getListeSommets().subList(0, indexCroisement));
+                List<Sommet> fragment2 = new ArrayList<>(solutionFirstPart.getListeSommets().subList(indexCroisement, solutionFirstPart.getListeSommets().size()));
 
-                List<Sommet> fragment3 = solutionSecondPart.getListeSommets().subList(0, indexCroisement);
-                List<Sommet> fragment4 = solutionSecondPart.getListeSommets().subList(indexCroisement, solutionSecondPart.getListeSommets().size());
+                List<Sommet> fragment3 = new ArrayList<>(solutionSecondPart.getListeSommets().subList(0, indexCroisement));
+                List<Sommet> fragment4 = new ArrayList<>(solutionSecondPart.getListeSommets().subList(indexCroisement, solutionSecondPart.getListeSommets().size()));
 
-                List<Sommet> newSolution1 = new ArrayList<>();
-                newSolution1.addAll(fragment1);
-                newSolution1.addAll(fragment4);
-                List<Sommet> newSolution2 = new ArrayList<>();
-                newSolution2.addAll(fragment3);
-                newSolution2.addAll(fragment2);
+                List<Sommet> newSolution1 = new ArrayList<>(fragment4);
+                List<Sommet> newSolution2 = new ArrayList<>(fragment2);
+
+                //Supprime si un sommet existe dans les le fragment 1 et 4
+                List<Sommet> toRemoveFragment1 = new ArrayList<>();
+                for (Sommet sommet : fragment1) {
+                    if (newSolution1.contains(sommet)) {
+                        toRemoveFragment1.add(sommet);
+                    }
+                }
+
+                //Supprime si un sommet existe dans les le fragment 2 et 3
+                List<Sommet> toRemoveFragment3 = new ArrayList<>();
+                for (Sommet sommet : fragment3) {
+                    if (newSolution2.contains(sommet)) {
+                        toRemoveFragment3.add(sommet);
+                    }
+                }
+
+                for (Sommet sommet : toRemoveFragment1) {
+                    fragment1.remove(sommet);
+                }
+                for (Sommet sommet : toRemoveFragment3) {
+                    fragment3.remove(sommet);
+                }
+
+                fragment3.addAll(toRemoveFragment1);
+                fragment1.addAll(toRemoveFragment3);
+
+                newSolution1.addAll(0, fragment1);
+                newSolution2.addAll(0, fragment3);
 
                 population.add(new SolutionGen(newSolution1));
                 population.add(new SolutionGen(newSolution2));
             }
-            */
-
 
             //3 - Mutation
             for (SolutionGen solution : population) {
                 double rand = Math.random();
-                if (rand < 0.1) {
+                if (rand < 0.05) {
                     int a = Outils.getRandomBetween(0, solution.getListeSommets().size());
                     int b = Outils.getRandomBetween(0, solution.getListeSommets().size());
                     Collections.swap(solution.getListeSommets(), a, b);
                 }
             }
 
-
             System.out.println();
             for (SolutionGen solution : population) {
-                System.out.println(solution.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
+                System.out.println(Outils.distanceTotale(solution.getListeSommets()));
             }
         }
 
