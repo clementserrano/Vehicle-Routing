@@ -1,7 +1,7 @@
 package test;
 
-import main.AlgoGen;
 import main.graphe.Graphe;
+import main.génétique.AlgoGen;
 import main.tabou.Tabou;
 
 public class Test {

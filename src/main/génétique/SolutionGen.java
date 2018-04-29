@@ -1,4 +1,4 @@
-package main;
+package main.génétique;
 
 import main.graphe.Graphe;
 import main.graphe.Sommet;
@@ -22,8 +22,4 @@ public class SolutionGen {
         return listeSommets;
     }
 
-    public boolean containsAll(Graphe graphe) {
-        System.out.println(Arrays.asList(graphe.getAdjacence().keySet()));
-        return this.listeSommets.containsAll(Arrays.asList(graphe.getAdjacence().keySet()));
-    }
 }
