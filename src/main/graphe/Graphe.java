@@ -17,7 +17,7 @@ public class Graphe {
     private Sommet sommetDepart;
     private int capacite;
 
-    public Graphe(String filename) {
+    public Graphe(String filename, int flag) {
         try {
             File file = new File("src/data/" + filename);
             Scanner input = new Scanner(file);
@@ -56,11 +56,19 @@ public class Graphe {
                     Sommet sommetA = listeSommet.get(i);
                     Sommet sommetB = listeSommet.get(j);
                     double distance = Outils.distance(listeSommet.get(i), listeSommet.get(j));
-
-                    Arc arc1 = new Arc(sommetA, sommetB, distance);
-                    adjacence.get(sommetA).add(arc1);
-                    Arc arc2 = new Arc(sommetB, sommetA, distance);
-                    adjacence.get(sommetB).add(arc2);
+                    if (flag == 0) {
+                        Arc arc1 = new Arc(sommetA, sommetB, distance);
+                        adjacence.get(sommetA).add(arc1);
+                        Arc arc2 = new Arc(sommetB, sommetA, distance);
+                        adjacence.get(sommetB).add(arc2);
+                    } else if (flag == 1) {
+                        if(sommetA.getIndex() == 0 ||sommetB.getIndex() == 0){
+                            Arc arc1 = new Arc(sommetA, sommetB, distance);
+                            adjacence.get(sommetA).add(arc1);
+                            Arc arc2 = new Arc(sommetB, sommetA, distance);
+                            adjacence.get(sommetB).add(arc2);
+                        }
+                    }
                 }
             }
         } catch (FileNotFoundException e) {

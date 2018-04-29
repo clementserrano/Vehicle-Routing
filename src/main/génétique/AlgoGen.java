@@ -138,17 +138,27 @@ public class AlgoGen {
             for (SolutionGen solution : population) {
                 double rand = Math.random();
                 if (rand < 0.05) {
+                    SolutionGen solution_tmp = new SolutionGen(solution.getListeSommets());
                     int a = Outils.getRandomBetween(1, solution.getListeSommets().size());
                     int b = Outils.getRandomBetween(1, solution.getListeSommets().size());
                     Collections.swap(solution.getListeSommets(), a, b);
+                    if (!Outils.capaciteRespectee(graphe, solution.getListeSommets())
+                            || solution.getListeSommets().get(0).getIndex() != 0 || solution.getListeSommets().get(solution.getListeSommets().size() - 1).getIndex() != 0) {
+                        solution = solution_tmp;
+                    }
                 }
             }
 
             if (i % 1000 == 0) {
                 System.out.println();
+                solutionFound = population.get(0);
                 for (SolutionGen solution : population) {
-                    System.out.println(solution.getListeSommets().stream().map(Sommet::toString).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
+                    if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
+                        solutionFound = solution;
+                    }
                 }
+                System.out.print("Meilleur solution de la population courante : " + Outils.distanceTotale(solutionFound.getListeSommets()));
+                System.out.print(" Génération : " + i);
             }
         }
 
@@ -166,14 +176,11 @@ public class AlgoGen {
             graphe.dessine(solutionFound.getListeSommets().get(j).getX() * 5, solutionFound.getListeSommets().get(j).getY() * 5, solutionFound.getListeSommets().get(j + 1).getX() * 5, solutionFound.getListeSommets().get(j + 1).getY() * 5);
         }*/
 
-        System.out.println("Meilleur : ");
-        System.out.println(solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")) + " " + Outils.distanceTotale(solutionFound.getListeSommets()));
         return solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";"));
     }
 
     private List<Sommet> findSolutionX0(Graphe graphe) {
         List<Sommet> solution_tmp = Outils.findFirstSolution(graphe);
-        List<Sommet> sommet_list = new ArrayList<>();
 
         boolean solutionOK = false;
 
