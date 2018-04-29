@@ -135,14 +135,14 @@ public class AlgoGen {
             }
 
             //3 - Mutation
-            /*for (SolutionGen solution : population) {
+            for (SolutionGen solution : population) {
                 double rand = Math.random();
                 if (rand < 0.05) {
                     int a = Outils.getRandomBetween(1, solution.getListeSommets().size());
                     int b = Outils.getRandomBetween(1, solution.getListeSommets().size());
                     Collections.swap(solution.getListeSommets(), a, b);
                 }
-            }*/
+            }
 
             if (i % 10000 == 0) {
                 System.out.println();
