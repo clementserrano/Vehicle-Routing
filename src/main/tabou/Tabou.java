@@ -32,7 +32,7 @@ public class Tabou {
         int i = 0;
 
         System.out.println("-------------------------------------------------------------------------------------------------------");
-        System.out.println(i + " : " + distanceTotaleMin + "    tabou : " + listeTabou.size());
+        System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
         System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
 
         while (i < ITERATION_MAX) {
@@ -67,15 +67,15 @@ public class Tabou {
             }
 
             i++;
-            if (i % 10000 == 0) {
+            if (i % (ITERATION_MAX/10) == 0) {
                 System.out.println("-------------------------------------------------------------------------------------------------------");
-                System.out.println(i + " : " + distanceTotaleMin + "    tabou : " + listeTabou.size());
+                System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
                 System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
             }
         }
 
         System.out.println("---------------------------------------TABOU END-------------------------------------------------------");
-        System.out.println(i + " : " + distanceTotaleMin + "    tabou : " + listeTabou.size());
+        System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
 
         graphe.startDraw();
         for (int j = 0; j < bestSolution.size() - 1; j++) {
@@ -104,13 +104,13 @@ public class Tabou {
             fragmentA.clear();
             fragmentB.clear();
             //A VOIR: Les fragments ont souvent une taille de seulement 1.
-            indexA = Outils.getRandomBetween(1, solution.size() - 2);
-            int tailleMaxA = solution.size() - 2 - indexA;
+            indexA = Outils.getRandomBetween(1, solution.size() - 3);
+            int tailleMaxA = solution.size() - 3 - indexA;
             int tailleA = Outils.getRandomBetween(0, tailleMaxA > TAILLE_MAX_PERMUTATION ? TAILLE_MAX_PERMUTATION : tailleMaxA);
             indexAFin = indexA + tailleA;
 
-            indexB = Outils.getRandomBetween(indexAFin, solution.size() - 1);
-            int tailleMaxB = solution.size() - 1 - indexB;
+            indexB = Outils.getRandomBetween(indexAFin, solution.size() - 2);
+            int tailleMaxB = solution.size() - 2 - indexB;
             int tailleB = Outils.getRandomBetween(0, tailleMaxB > TAILLE_MAX_PERMUTATION ? TAILLE_MAX_PERMUTATION : tailleMaxB);
             indexBFin = indexB + tailleB;
 
