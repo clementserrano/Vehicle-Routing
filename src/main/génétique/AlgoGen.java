@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.joining;
 public class AlgoGen {
 
     private final int ITERATION_MAX = 100000;
-    private final int POPULATION_SIZE = 200;
+    private final int POPULATION_SIZE = 150;
 
     public String findSolution(Graphe graphe) {
         System.out.println("-------------------------------------------------------------------------------------------------------");
@@ -144,7 +144,7 @@ public class AlgoGen {
                 }
             }
 
-            if (i % 10000 == 0) {
+            if (i % 1000 == 0) {
                 System.out.println();
                 for (SolutionGen solution : population) {
                     System.out.println(solution.getListeSommets().stream().map(Sommet::toString).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
