@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.joining;
 public class AlgoGen {
 
     private final int ITERATION_MAX = 100000;
-    private final int POPULATION_SIZE = 21;
+    private final int POPULATION_SIZE = 200;
 
     public String findSolution(Graphe graphe) {
         System.out.println("-------------------------------------------------------------------------------------------------------");
@@ -127,14 +127,14 @@ public class AlgoGen {
             }
 
             //3 - Mutation
-            /*for (SolutionGen solution : population) {
+            for (SolutionGen solution : population) {
                 double rand = Math.random();
                 if (rand < 0.05) {
                     int a = Outils.getRandomBetween(0, solution.getListeSommets().size());
                     int b = Outils.getRandomBetween(0, solution.getListeSommets().size());
                     Collections.swap(solution.getListeSommets(), a, b);
                 }
-            }*/
+            }
 
             /*if (i % 1 == 0) {
                 System.out.println();
