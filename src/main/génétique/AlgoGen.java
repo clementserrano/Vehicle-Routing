@@ -23,22 +23,23 @@ public class AlgoGen {
         }
 
         for (int i = 0; i < ITERATION_MAX; i++) {
+            Collections.sort(population, (s1, s2) -> {
+                if (Outils.distanceTotale(s1.getListeSommets()) > Outils.distanceTotale(s2.getListeSommets()))
+                    return 1;
+                if (Outils.distanceTotale(s1.getListeSommets()) < Outils.distanceTotale(s2.getListeSommets()))
+                    return -1;
+                return 0;
+            });
 
             //1 - Reproduction
             int cpt = 0;
             List<Float> fitnessList = new ArrayList<>();
-            List<SolutionGen> toRemoveSolution = new ArrayList<>();
-            for (SolutionGen solution : population) {
+            for (SolutionGen solution : population.subList(0, population.size() / 2)) {
                 float fitness;
                 fitness = (float) Math.pow(Outils.distanceTotale(solution.getListeSommets()), 2);
-                if (!Outils.capaciteRespectee(graphe, solution.getListeSommets())) {
-                    toRemoveSolution.add(solution);
-                } else {
-                    fitnessList.add(fitness);
-                    cpt += fitness;
-                }
+                fitnessList.add(fitness);
+                cpt += fitness;
             }
-            population.removeAll(toRemoveSolution);
 
             //Pondération
             float cpt2 = 0;
@@ -82,8 +83,8 @@ public class AlgoGen {
 
             for (int j = 0; j < first.size(); j++) {
                 int indexCroisement = Outils.getRandomBetween(0, first.get(j).getListeSommets().size());
-                SolutionGen solutionFirstPart = first.get(j);
-                SolutionGen solutionSecondPart = second.get(j);
+                SolutionGen solutionFirstPart = new SolutionGen(first.get(j).getListeSommets());
+                SolutionGen solutionSecondPart = new SolutionGen(second.get(j).getListeSommets());
                 List<Sommet> fragment1 = new ArrayList<>(solutionFirstPart.getListeSommets().subList(0, indexCroisement));
                 List<Sommet> fragment2 = new ArrayList<>(solutionFirstPart.getListeSommets().subList(indexCroisement, solutionFirstPart.getListeSommets().size()));
 
@@ -122,26 +123,33 @@ public class AlgoGen {
                 newSolution1.addAll(0, fragment1);
                 newSolution2.addAll(0, fragment3);
 
-                population.add(new SolutionGen(newSolution1));
-                population.add(new SolutionGen(newSolution2));
-            }
-
-            //3 - Mutation
-            for (SolutionGen solution : population) {
-                double rand = Math.random();
-                if (rand < 0.05) {
-                    int a = Outils.getRandomBetween(0, solution.getListeSommets().size());
-                    int b = Outils.getRandomBetween(0, solution.getListeSommets().size());
-                    Collections.swap(solution.getListeSommets(), a, b);
+                if (Outils.capaciteRespectee(graphe, newSolution1) && Outils.capaciteRespectee(graphe, newSolution2)
+                        && newSolution1.get(0).getIndex() == 0 && newSolution1.get(newSolution1.size() - 1).getIndex() == 0
+                        && newSolution2.get(0).getIndex() == 0 && newSolution2.get(newSolution2.size() - 1).getIndex() == 0) {
+                    population.add(new SolutionGen(newSolution1));
+                    population.add(new SolutionGen(newSolution2));
+                } else {
+                    population.add(solutionFirstPart);
+                    population.add(solutionSecondPart);
                 }
             }
 
-            /*if (i % 1 == 0) {
+            //3 - Mutation
+            /*for (SolutionGen solution : population) {
+                double rand = Math.random();
+                if (rand < 0.05) {
+                    int a = Outils.getRandomBetween(1, solution.getListeSommets().size());
+                    int b = Outils.getRandomBetween(1, solution.getListeSommets().size());
+                    Collections.swap(solution.getListeSommets(), a, b);
+                }
+            }*/
+
+            if (i % 10000 == 0) {
                 System.out.println();
                 for (SolutionGen solution : population) {
                     System.out.println(solution.getListeSommets().stream().map(Sommet::toString).collect(joining(";")) + " " + Outils.distanceTotale(solution.getListeSommets()));
                 }
-            }*/
+            }
         }
 
 
@@ -151,10 +159,6 @@ public class AlgoGen {
                 solutionFound = solution;
             }
         }
-
-        List<Sommet> solutionSommetsList = solutionFound.getListeSommets();
-        solutionSommetsList.add(graphe.getSommetDepart());
-        solutionSommetsList.add(0, graphe.getSommetDepart());
 
         /*
         graphe.startDraw();
@@ -174,7 +178,7 @@ public class AlgoGen {
         boolean solutionOK = false;
 
         while (!solutionOK) {
-            Collections.shuffle(solution_tmp);
+            Collections.shuffle(solution_tmp.subList(1, solution_tmp.size() - 1));
             solutionOK = Outils.capaciteRespectee(graphe, solution_tmp);
         }
 
