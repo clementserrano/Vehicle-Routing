@@ -9,7 +9,7 @@ import java.util.*;
 public class Outils {
 
     public static double distance(Sommet a, Sommet b){
-        return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2));
+        return Math.round(Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2)));
     }
 
     public static Sommet getVoisinProche(List<Arc> arcs, Set<Sommet> sommetsParcourus){
