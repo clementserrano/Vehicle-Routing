@@ -10,7 +10,7 @@ public class TestGen {
 
         System.out.println("\nAlgoGen");
         AlgoGen algoGen = new AlgoGen();
-        System.out.println("\nFinal : " + algoGen.findSolution(graphe) + "\n");
+        System.out.println("\nRésultat : " + algoGen.findSolution(graphe));
 
         System.out.println("Fin");
     }

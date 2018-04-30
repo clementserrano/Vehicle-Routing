@@ -158,7 +158,7 @@ public class AlgoGen {
                     }
                 }
                 System.out.print("Meilleur solution de la population courante : " + Outils.distanceTotale(solutionFound.getListeSommets()));
-                System.out.print(" Génération : " + i);
+                System.out.println(" Génération : " + i);
             }
         }
 
@@ -175,8 +175,7 @@ public class AlgoGen {
         for (int j = 0; j < solutionFound.getListeSommets().size() - 1; j++) {
             graphe.dessine(solutionFound.getListeSommets().get(j).getX() * 5, solutionFound.getListeSommets().get(j).getY() * 5, solutionFound.getListeSommets().get(j + 1).getX() * 5, solutionFound.getListeSommets().get(j + 1).getY() * 5);
         }*/
-
-        return solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";"));
+        return Outils.cleanSolution(solutionFound.getListeSommets()).stream().map(sommet -> sommet.toString()).collect(joining(";"));
     }
 
     private List<Sommet> findSolutionX0(Graphe graphe) {
