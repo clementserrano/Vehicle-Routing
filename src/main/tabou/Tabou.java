@@ -59,6 +59,10 @@ public class Tabou {
                 if (voisinNext.getDistance() < distanceTotaleMin) {
                     bestSolution = voisinNext.getSolution();
                     distanceTotaleMin = voisinNext.getDistance();
+
+                    System.out.println("-------------------------------------------------------------------------------------------------------");
+                    System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
+                    System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
                 }
 
                 voisinPrev = voisinNext;
@@ -67,11 +71,6 @@ public class Tabou {
             }
 
             i++;
-            if (i % (ITERATION_MAX/10) == 0) {
-                System.out.println("-------------------------------------------------------------------------------------------------------");
-                System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
-                System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
-            }
         }
 
         System.out.println("---------------------------------------TABOU END-------------------------------------------------------");
