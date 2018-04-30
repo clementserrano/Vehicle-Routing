@@ -1,23 +1,25 @@
 package main.tabou;
 
-import main.graphe.Graphe;
+import javafx.application.Platform;
 import main.Outils;
+import main.graphe.Graphe;
 import main.graphe.Sommet;
+import main.gui.Algo;
+import main.gui.Res;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.joining;
 
-public class Tabou {
+public class Tabou implements Algo {
 
-    private static final int ITERATION_MAX = 100000;
-    private static final int TAILLE_VOISINAGE = 200;
-    private static final int TAILLE_LISTE_TABOU = 100;
+    private int ITERATION_MAX = 100000;
+    private int TAILLE_VOISINAGE = 200;
+    private int TAILLE_LISTE_TABOU = 100;
+    private int TAILLE_MAX_PERMUTATION;
 
-    private static int TAILLE_MAX_PERMUTATION;
-
-    public String findSolution(Graphe graphe) {
+    public String findSolution(Graphe graphe, Res controller) {
         // Création d'une solution X0
         List<Sommet> solution = Outils.findFirstSolution(graphe);
         List<Sommet> bestSolution = solution;
@@ -31,16 +33,14 @@ public class Tabou {
         Voisin voisinPrev = new Voisin(solution, distanceTotaleMin, null);
         int i = 0;
 
-        System.out.println("-------------------------------------------------------------------------------------------------------");
-        System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
-        System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
+        print(bestSolution, distanceTotaleMin, listeTabou, i, controller);
 
         while (i < ITERATION_MAX) {
             Voisinage voisinage = new Voisinage();
             List<Permutation> permutations = new ArrayList<>();
             while (voisinage.size() < TAILLE_VOISINAGE) {
                 Voisin voisin = permutation(voisinPrev.getSolution(), graphe);
-                if(!permutations.contains(voisin.getPermutation())){
+                if (!permutations.contains(voisin.getPermutation())) {
                     voisinage.add(voisin);
                     permutations.add(voisin.getPermutation());
                 }
@@ -48,7 +48,7 @@ public class Tabou {
 
             Voisin voisinNext = voisinage.getBest(listeTabou);
 
-            if(voisinNext != null) {
+            if (voisinNext != null) {
                 if (voisinNext.getDistance() > voisinPrev.getDistance()) {
                     if (listeTabou.size() >= TAILLE_LISTE_TABOU) {
                         listeTabou.remove(0);
@@ -60,27 +60,25 @@ public class Tabou {
                     bestSolution = voisinNext.getSolution();
                     distanceTotaleMin = voisinNext.getDistance();
 
-                    System.out.println("-------------------------------------------------------------------------------------------------------");
-                    System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
-                    System.out.println(bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";")));
+                    print(bestSolution, distanceTotaleMin, listeTabou, i, controller);
                 }
 
                 voisinPrev = voisinNext;
-            }else{
+            } else {
                 break;
             }
 
             i++;
+            printIter(i, controller);
         }
 
-        System.out.println("---------------------------------------TABOU END-------------------------------------------------------");
-        System.out.println("Itération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size());
-
-        graphe.startDraw();
-        for (int j = 0; j < bestSolution.size() - 1; j++) {
-            graphe.dessine(bestSolution.get(j).getX() * 5, bestSolution.get(j).getY() * 5, bestSolution.get(j + 1).getX() * 5, bestSolution.get(j + 1).getY() * 5);
-        }
+        print(bestSolution, distanceTotaleMin, listeTabou, i, controller);
         return bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";"));
+    }
+
+    @Override
+    public String getNom() {
+        return "Tabou";
     }
 
     private Voisin permutation(List<Sommet> solution, Graphe graphe) {
@@ -144,5 +142,27 @@ public class Tabou {
         return new Voisin(Outils.cleanSolution(solutionPermutee), Outils.distanceTotale(solutionPermutee), permutation);
     }
 
+    public void print(List<Sommet> bestSolution, float distanceTotaleMin, List<Permutation> listeTabou, int i, Res controller) {
+        final String res = "-------------------------------------------------------------------------------------------------------"
+                + "\nItération : " + i + "       Distance minimale : " + distanceTotaleMin + "       Taille tabou : " + listeTabou.size()
+                + "\n" + bestSolution.stream().map(sommet -> sommet.toString()).collect(joining(";"));
+        System.out.println(res);
+        Platform.runLater(() -> controller.updateConsole(res));
+    }
 
+    public void printIter(int i, Res controller) {
+        Platform.runLater(() -> controller.updateIter(i));
+    }
+
+    public void setITERATION_MAX(int ITERATION_MAX) {
+        this.ITERATION_MAX = ITERATION_MAX;
+    }
+
+    public void setTAILLE_VOISINAGE(int TAILLE_VOISINAGE) {
+        this.TAILLE_VOISINAGE = TAILLE_VOISINAGE;
+    }
+
+    public void setTAILLE_LISTE_TABOU(int TAILLE_LISTE_TABOU) {
+        this.TAILLE_LISTE_TABOU = TAILLE_LISTE_TABOU;
+    }
 }

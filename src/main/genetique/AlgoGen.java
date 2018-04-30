@@ -1,20 +1,25 @@
 package main.genetique;
 
+import javafx.application.Platform;
 import main.Outils;
 import main.graphe.Graphe;
 import main.graphe.Sommet;
+import main.gui.Algo;
+import main.gui.Res;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static java.util.stream.Collectors.joining;
 
-public class AlgoGen {
+public class AlgoGen implements Algo {
 
-    private final int ITERATION_MAX = 100000;
-    private final int POPULATION_SIZE = 150;
+    private int ITERATION_MAX = 100000;
+    private int POPULATION_SIZE = 150;
 
-    public String findSolution(Graphe graphe) {
-        System.out.println("-------------------------------------------------------------------------------------------------------");
+    public String findSolution(Graphe graphe, Res controller) {
+        print("-------------------------------------------------------------------------------------------------------", controller);
         SolutionGen solutionFound = new SolutionGen();
         List<SolutionGen> population = new ArrayList<>();
         for (int i = 0; i < POPULATION_SIZE; i++) {
@@ -157,9 +162,11 @@ public class AlgoGen {
                         solutionFound = solution;
                     }
                 }
-                System.out.print("Meilleur solution de la population courante : " + Outils.distanceTotale(solutionFound.getListeSommets()));
-                System.out.println(" Génération : " + i);
+                print("Meilleur solution de la population courante : " + Outils.distanceTotale(solutionFound.getListeSommets()), controller);
+                print(" Génération : " + i,controller);
             }
+
+            printIter(i, controller);
         }
 
 
@@ -170,12 +177,9 @@ public class AlgoGen {
             }
         }
 
-        /*
-        graphe.startDraw();
-        for (int j = 0; j < solutionFound.getListeSommets().size() - 1; j++) {
-            graphe.dessine(solutionFound.getListeSommets().get(j).getX() * 5, solutionFound.getListeSommets().get(j).getY() * 5, solutionFound.getListeSommets().get(j + 1).getX() * 5, solutionFound.getListeSommets().get(j + 1).getY() * 5);
-        }*/
-        return Outils.cleanSolution(solutionFound.getListeSommets()).stream().map(sommet -> sommet.toString()).collect(joining(";"));
+        String res = Outils.cleanSolution(solutionFound.getListeSommets()).stream().map(sommet -> sommet.toString()).collect(joining(";"));
+        print(res, controller);
+        return res;
     }
 
     private List<Sommet> findSolutionX0(Graphe graphe) {
@@ -189,5 +193,27 @@ public class AlgoGen {
         }
 
         return solution_tmp;
+    }
+
+    public void print(String txt, Res controller) {
+        System.out.println(txt);
+        Platform.runLater(() -> controller.updateConsole(txt));
+    }
+
+    public void printIter(int i, Res controller) {
+        Platform.runLater(() -> controller.updateIter(i));
+    }
+
+    @Override
+    public String getNom() {
+        return "Algo Gen";
+    }
+
+    public void setITERATION_MAX(int ITERATION_MAX) {
+        this.ITERATION_MAX = ITERATION_MAX;
+    }
+
+    public void setPOPULATION_SIZE(int POPULATION_SIZE) {
+        this.POPULATION_SIZE = POPULATION_SIZE;
     }
 }
