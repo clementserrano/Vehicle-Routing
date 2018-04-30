@@ -1,7 +1,7 @@
 package test;
 
 import main.graphe.Graphe;
-import main.génétique.AlgoGen;
+import main.genetique.AlgoGen;
 
 public class TestGen {
     public static void main(String[] args) {

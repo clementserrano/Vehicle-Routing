@@ -1,4 +1,4 @@
-package main.génétique;
+package main.genetique;
 
 import main.Outils;
 import main.graphe.Graphe;

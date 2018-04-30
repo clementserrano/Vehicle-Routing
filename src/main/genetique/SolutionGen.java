@@ -1,9 +1,7 @@
-package main.génétique;
+package main.genetique;
 
-import main.graphe.Graphe;
 import main.graphe.Sommet;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SolutionGen {
