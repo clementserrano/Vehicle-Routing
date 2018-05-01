@@ -157,13 +157,20 @@ public class AlgoGen implements Algo {
 
             for (SolutionGen solution : population) {
                 if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
-                    solutionFound = solution;
+                    solutionFound = new SolutionGen(solution.getListeSommets());
                 }
                 //System.out.println(Outils.cleanSolution(solutionFound.getListeSommets()).stream().map(sommet -> sommet.toString()).collect(joining(";")));
             }
 
             if (i % 1000 == 0) {
                 System.out.println();
+                SolutionGen bestSolutionCourante = population.get(0);
+                for (SolutionGen solution : population) {
+                    if (Outils.distanceTotale(bestSolutionCourante.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
+                        bestSolutionCourante = solution;
+                    }
+                }
+                print("Meilleur solution de la population courante : " + Outils.distanceTotale(bestSolutionCourante.getListeSommets()), controller);
                 print("Meilleur solution obtenue : " + Outils.distanceTotale(solutionFound.getListeSommets()), controller);
                 print(" Génération : " + i,controller);
             }
