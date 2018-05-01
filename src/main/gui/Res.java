@@ -41,13 +41,13 @@ public class Res {
             @Override
             public Void call() {
                 GraphicsContext g = canvas.getGraphicsContext2D();
-                g.setFont(new Font(20));
                 HashMap<Integer, Sommet> sommets = new HashMap<>();
                 for (Sommet sommet : graphe.getAdjacence().keySet()) {
                     if (sommet.getIndex() == 0) {
                         g.setFill(Paint.valueOf("red"));
                     }
-                    g.fillText(sommet.getIndex() + "", getX(sommet), getY(sommet));
+                    g.fillText(sommet.getIndex() + "", getX(sommet)+2, getY(sommet)-2);
+                    g.fillOval(getX(sommet)-3, getY(sommet)-3,6,6);
                     sommets.put(sommet.getIndex(), sommet);
                     if (sommet.getIndex() == 0) {
                         g.setFill(Paint.valueOf("black"));
@@ -58,6 +58,7 @@ public class Res {
                 List<Integer> solution = Arrays.asList(res.split(";")).stream().map(sommet -> Integer.valueOf(sommet)).collect(Collectors.toList());
                 g.moveTo(getX(graphe.getSommetDepart()), getY(graphe.getSommetDepart()));
                 g.setLineWidth(1.3);
+                g.setFont(new Font(17));
                 int indexColor = 0;
                 String[] color = {"red", "blue", "green", "grey", "brown", "orange", "pink", "purple", "cyan", "magenta"};
                 for (Integer sommet : solution) {
@@ -95,10 +96,10 @@ public class Res {
     }
 
     private float getX(Sommet sommet) {
-        return sommet.getX() * 8;
+        return sommet.getX() * 15;
     }
 
     private float getY(Sommet sommet) {
-        return 10 + sommet.getY() * 5;
+        return 10 + sommet.getY() * 8;
     }
 }

@@ -7,17 +7,17 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="606.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.gui.Res">
+<AnchorPane prefHeight="850" prefWidth="1550" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.gui.Res">
    <children>
-      <TabPane prefHeight="606.0" prefWidth="851.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="850" prefWidth="1550" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Console">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea fx:id="console" editable="false" layoutX="11.0" layoutY="24.0" prefHeight="535.0" prefWidth="829.0" />
-                        <Label layoutX="622.0" layoutY="4.0" text="Itération n° " />
-                        <Label fx:id="numIter" alignment="CENTER_RIGHT" layoutX="712.0" layoutY="4.0" prefHeight="21.0" prefWidth="122.0" text="0" textAlignment="RIGHT" />
+                        <TextArea fx:id="console" editable="false" layoutX="8.0" layoutY="29.0" prefHeight="772.0" prefWidth="1534.0" />
+                        <Label layoutX="1324.0" layoutY="4.0" text="Itération n° " />
+                        <Label fx:id="numIter" alignment="CENTER_RIGHT" layoutX="1414.0" layoutY="4.0" prefHeight="21.0" prefWidth="122.0" text="0" textAlignment="RIGHT" />
                      </children>
                   </AnchorPane>
             </content>
@@ -26,7 +26,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Canvas fx:id="canvas" height="555.0" layoutX="6.0" layoutY="6.0" width="839.0" />
+                        <Canvas fx:id="canvas" height="800" layoutX="8.0" layoutY="6.0" width="1534.0" />
                      </children></AnchorPane>
             </content>
           </Tab>
