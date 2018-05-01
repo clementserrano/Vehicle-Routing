@@ -27,6 +27,9 @@ public class Res {
     @FXML
     private Label numIter;
 
+    @FXML
+    private Label param;
+
     private Algo algo;
     private Graphe graphe;
 
@@ -85,6 +88,10 @@ public class Res {
 
     public void updateIter(int i) {
         numIter.setText(i + "");
+    }
+
+    public void updateParam(String p) {
+        param.setText(p);
     }
 
     public void setAlgo(Algo algo) {

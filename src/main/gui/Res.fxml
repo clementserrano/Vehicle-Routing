@@ -18,6 +18,7 @@
                         <TextArea fx:id="console" editable="false" layoutX="8.0" layoutY="29.0" prefHeight="772.0" prefWidth="1534.0" />
                         <Label layoutX="1324.0" layoutY="4.0" text="Itération n° " />
                         <Label fx:id="numIter" alignment="CENTER_RIGHT" layoutX="1414.0" layoutY="4.0" prefHeight="21.0" prefWidth="122.0" text="0" textAlignment="RIGHT" />
+                        <Label fx:id="param" layoutX="14.0" layoutY="4.0" />
                      </children>
                   </AnchorPane>
             </content>

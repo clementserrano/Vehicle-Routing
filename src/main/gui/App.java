@@ -58,7 +58,10 @@ public class App extends Application {
         tabou.setITERATION_MAX(Integer.valueOf(tIterations.getText()));
         tabou.setTAILLE_LISTE_TABOU(Integer.valueOf(tTabou.getText()));
         tabou.setTAILLE_VOISINAGE(Integer.valueOf(tVoisinage.getText()));
-        launchAlgo(tabou, graphe);
+        String param = "Itération max : " + tIterations.getText()
+                + "                Taille liste Tabou : " + tTabou.getText()
+                + "                Taille voisinage : " + tVoisinage.getText();
+        launchAlgo(tabou, graphe, param);
     }
 
     @FXML
@@ -68,10 +71,12 @@ public class App extends Application {
         AlgoGen algoGen = new AlgoGen();
         algoGen.setITERATION_MAX(Integer.valueOf(agIterations.getText()));
         algoGen.setPOPULATION_SIZE(Integer.valueOf(agPopulation.getText()));
-        launchAlgo(algoGen, graphe);
+        String param = "Itération max : " + agIterations.getText()
+                + "                Taille population de départ : " + agPopulation.getText();
+        launchAlgo(algoGen, graphe, param);
     }
 
-    private void launchAlgo(Algo algo, Graphe graphe) {
+    private void launchAlgo(Algo algo, Graphe graphe, String param) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Res.class.getResource("Res.fxml"));
@@ -83,6 +88,7 @@ public class App extends Application {
             stage.setTitle(algo.getNom());
             stage.setScene(new Scene(rootLayout));
             stage.show();
+            res.updateParam(param);
             res.startAlgo();
         } catch (IOException e) {
             e.printStackTrace();
