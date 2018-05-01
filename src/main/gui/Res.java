@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import main.graphe.Graphe;
 import main.graphe.Sommet;
@@ -43,19 +44,33 @@ public class Res {
                 g.setFont(new Font(20));
                 HashMap<Integer, Sommet> sommets = new HashMap<>();
                 for (Sommet sommet : graphe.getAdjacence().keySet()) {
+                    if (sommet.getIndex() == 0) {
+                        g.setFill(Paint.valueOf("red"));
+                    }
                     g.fillText(sommet.getIndex() + "", getX(sommet), getY(sommet));
                     sommets.put(sommet.getIndex(), sommet);
+                    if (sommet.getIndex() == 0) {
+                        g.setFill(Paint.valueOf("black"));
+                    }
                 }
 
                 String res = algo.findSolution(graphe, controller);
                 List<Integer> solution = Arrays.asList(res.split(";")).stream().map(sommet -> Integer.valueOf(sommet)).collect(Collectors.toList());
                 g.moveTo(getX(graphe.getSommetDepart()), getY(graphe.getSommetDepart()));
-                g.setLineWidth(1.0);
+                g.setLineWidth(1.3);
+                int indexColor = 0;
+                String[] color = {"red", "blue", "green", "grey", "brown", "orange", "pink", "purple", "cyan", "magenta"};
                 for (Integer sommet : solution) {
                     g.lineTo(getX(sommets.get(sommet)), getY(sommets.get(sommet)));
                     g.stroke();
+                    if (sommet == 0) {
+                        g.setStroke(Paint.valueOf(color[indexColor]));
+                        g.beginPath();
+                        g.moveTo(getX(graphe.getSommetDepart()), getY(graphe.getSommetDepart()));
+                        if (color.length <= indexColor) indexColor = 0;
+                        indexColor++;
+                    }
                 }
-                g.setLineWidth(0);
 
                 return null;
             }
