@@ -26,7 +26,7 @@ public class AlgoGen implements Algo {
             SolutionGen solution = new SolutionGen(findSolutionX0(graphe));
             population.add(solution);
         }
-        solutionFound = population.get(0);
+        solutionFound = new SolutionGen(population.get(0).getListeSommets());
 
         for (int i = 0; i < ITERATION_MAX; i++) {
             Collections.sort(population, (s1, s2) -> {
