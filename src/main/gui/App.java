@@ -66,7 +66,7 @@ public class App extends Application {
 
     @FXML
     public void launchAlgoGen() {
-        Graphe graphe = new Graphe("data" + agNumDS.getText() + ".txt", 0);
+        Graphe graphe = new Graphe("data" + agNumDS.getText() + ".txt", 1);
         graphe.setCapacite(100);
         AlgoGen algoGen = new AlgoGen();
         algoGen.setITERATION_MAX(Integer.valueOf(agIterations.getText()));
