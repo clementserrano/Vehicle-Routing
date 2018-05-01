@@ -26,6 +26,7 @@ public class AlgoGen implements Algo {
             SolutionGen solution = new SolutionGen(findSolutionX0(graphe));
             population.add(solution);
         }
+        solutionFound = population.get(0);
 
         for (int i = 0; i < ITERATION_MAX; i++) {
             Collections.sort(population, (s1, s2) -> {
@@ -154,23 +155,22 @@ public class AlgoGen implements Algo {
                 }
             }
 
+            for (SolutionGen solution : population) {
+                if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
+                    solutionFound = solution;
+                }
+                //System.out.println(Outils.cleanSolution(solutionFound.getListeSommets()).stream().map(sommet -> sommet.toString()).collect(joining(";")));
+            }
+
             if (i % 1000 == 0) {
                 System.out.println();
-                solutionFound = population.get(0);
-                for (SolutionGen solution : population) {
-                    if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
-                        solutionFound = solution;
-                    }
-                }
-                print("Meilleur solution de la population courante : " + Outils.distanceTotale(solutionFound.getListeSommets()), controller);
+                print("Meilleur solution obtenue : " + Outils.distanceTotale(solutionFound.getListeSommets()), controller);
                 print(" Génération : " + i,controller);
             }
 
             printIter(i, controller);
         }
 
-
-        solutionFound = population.get(0);
         for (SolutionGen solution : population) {
             if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
                 solutionFound = solution;
