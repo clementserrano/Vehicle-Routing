@@ -141,16 +141,20 @@ public class AlgoGen implements Algo {
             }
 
             //3 - Mutation
-            for (SolutionGen solution : population) {
+
+            for (int j = 0; j < population.size(); j++) {
+                SolutionGen solution = population.get(j);
                 double rand = Math.random();
                 if (rand < 0.05) {
-                    SolutionGen solution_tmp = new SolutionGen(solution.getListeSommets());
-                    int a = Outils.getRandomBetween(1, solution.getListeSommets().size());
-                    int b = Outils.getRandomBetween(1, solution.getListeSommets().size());
+                    SolutionGen solution_tmp = new SolutionGen(new ArrayList<>(solution.getListeSommets()));
+                    int a = Outils.getRandomBetween(1, solution.getListeSommets().size() - 1);
+                    int b = Outils.getRandomBetween(1, solution.getListeSommets().size() - 1);
+                    while (b == a)
+                        b = Outils.getRandomBetween(1, solution.getListeSommets().size());
                     Collections.swap(solution.getListeSommets(), a, b);
                     if (!Outils.capaciteRespectee(graphe, solution.getListeSommets())
                             || solution.getListeSommets().get(0).getIndex() != 0 || solution.getListeSommets().get(solution.getListeSommets().size() - 1).getIndex() != 0) {
-                        solution = solution_tmp;
+                        population.set(j, new SolutionGen(new ArrayList<>(solution_tmp.getListeSommets())));
                     }
                 }
             }
@@ -158,22 +162,13 @@ public class AlgoGen implements Algo {
             for (SolutionGen solution : population) {
                 float a = Outils.distanceTotale(solutionFound.getListeSommets());
                 float b = Outils.distanceTotale(solution.getListeSommets());
-                if (a > b) {
+                if (a > b && Outils.capaciteRespectee(graphe, solution.getListeSommets())) {
                     solutionFound = new SolutionGen(new ArrayList<>(solution.getListeSommets()));
+                    System.out.println();
+                    print("Meilleur solution obtenue : " + Outils.distanceTotale(solutionFound.getListeSommets()), controller);
+                    print(" Génération : " + i, controller);
+                    print(solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")), controller);
                 }
-            }
-
-            if (i % 1000 == 0) {
-                System.out.println();
-                SolutionGen bestSolutionCourante = population.get(0);
-                for (SolutionGen solution : population) {
-                    if (Outils.distanceTotale(bestSolutionCourante.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
-                        bestSolutionCourante = solution;
-                    }
-                }
-                print("Meilleur solution de la population courante : " + Outils.distanceTotale(bestSolutionCourante.getListeSommets()), controller);
-                print("Meilleur solution obtenue : " + Outils.distanceTotale(solutionFound.getListeSommets()), controller);
-                print(" Génération : " + i,controller);
             }
 
             printIter(i, controller);
