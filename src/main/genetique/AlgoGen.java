@@ -167,7 +167,6 @@ public class AlgoGen implements Algo {
                     System.out.println();
                     print("Meilleur solution obtenue : " + Outils.distanceTotale(solutionFound.getListeSommets()), controller);
                     print(" Génération : " + i, controller);
-                    print(solutionFound.getListeSommets().stream().map(sommet -> sommet.toString()).collect(joining(";")), controller);
                 }
             }
 
