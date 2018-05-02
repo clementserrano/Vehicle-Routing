@@ -156,10 +156,11 @@ public class AlgoGen implements Algo {
             }
 
             for (SolutionGen solution : population) {
-                if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
-                    solutionFound = new SolutionGen(solution.getListeSommets());
+                float a = Outils.distanceTotale(solutionFound.getListeSommets());
+                float b = Outils.distanceTotale(solution.getListeSommets());
+                if (a > b) {
+                    solutionFound = new SolutionGen(new ArrayList<>(solution.getListeSommets()));
                 }
-                //System.out.println(Outils.cleanSolution(solutionFound.getListeSommets()).stream().map(sommet -> sommet.toString()).collect(joining(";")));
             }
 
             if (i % 1000 == 0) {
@@ -176,12 +177,6 @@ public class AlgoGen implements Algo {
             }
 
             printIter(i, controller);
-        }
-
-        for (SolutionGen solution : population) {
-            if (Outils.distanceTotale(solutionFound.getListeSommets()) > Outils.distanceTotale(solution.getListeSommets())) {
-                solutionFound = solution;
-            }
         }
 
         String res = Outils.cleanSolution(solutionFound.getListeSommets()).stream().map(sommet -> sommet.toString()).collect(joining(";"));
